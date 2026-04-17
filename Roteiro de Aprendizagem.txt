@@ -1,0 +1,299 @@
+============================================================
+  ROTEIRO DE APRENDIZAGEM — NEURAL NETWORKS DE BASE
+  Para quem sabe o básico de Python
+============================================================
+ 
+  Objetivo: Aprender Neural Networks desde os fundamentos
+            até construir e treinar modelos reais.
+ 
+  Estrutura: 5 Fases → cada fase tem lições, código e exercícios
+  Ficheiros: cada lição tem o seu próprio .txt e .py
+ 
+============================================================
+ 
+ 
+------------------------------------------------------------
+  FASE 1 — FUNDAMENTOS (NumPy e Matemática Essencial)
+------------------------------------------------------------
+ 
+  Objetivo desta fase:
+    Perceber como os dados são representados e manipulados.
+    Toda a matemática de neural networks corre em cima disto.
+ 
+  LIÇÃO 1 — Arrays e Operações NumPy
+  ├── Ficheiro: licao1_numpy_arrays.txt
+  ├── Conteúdo:
+  │     - Vetores e matrizes (np.array)
+  │     - Operações básicas (+, *, **)
+  │     - Multiplicação de matrizes (np.dot)
+  │     - Reshape e Transpose
+  │     - Funções estatísticas (mean, sum, max, min, std)
+  │     - Arrays aleatórios (rand vs randn)
+  └── Estado: ✅ Concluída
+ 
+  LIÇÃO 2 — Dados em Machine Learning
+  ├── Ficheiro: licao2_dados_ml.txt
+  ├── Conteúdo:
+  │     - O que são features e labels
+  │     - Dividir dados: treino, validação e teste
+  │     - Normalização e standardização
+  │     - Carregar dados com NumPy e pandas
+  └── Estado: 🔲 Por fazer
+ 
+  LIÇÃO 3 — Matemática Essencial para Neural Networks
+  ├── Ficheiro: licao3_matematica.txt
+  ├── Conteúdo:
+  │     - O que é uma função e o que é minimizar
+  │     - Derivadas — intuição visual (sem fórmulas complexas)
+  │     - Gradiente — "a direção da subida"
+  │     - Gradient descent — "descer a montanha"
+  └── Estado: 🔲 Por fazer
+ 
+ 
+------------------------------------------------------------
+  FASE 2 — O NEURÔNIO ARTIFICIAL
+------------------------------------------------------------
+ 
+  Objetivo desta fase:
+    Perceber como funciona um único neurônio antes de
+    juntar vários numa rede.
+ 
+  LIÇÃO 4 — O Perceptron
+  ├── Ficheiro: licao4_perceptron.txt
+  ├── Conteúdo:
+  │     - O que é um neurônio biológico vs artificial
+  │     - Estrutura: entradas, pesos, bias, saída
+  │     - Calcular a saída de um neurônio à mão
+  │     - Implementar um perceptron em Python puro
+  └── Estado: 🔲 Por fazer
+ 
+  LIÇÃO 5 — Funções de Ativação
+  ├── Ficheiro: licao5_ativacao.txt
+  ├── Conteúdo:
+  │     - Para que servem as funções de ativação
+  │     - Sigmoid       → saída entre 0 e 1
+  │     - ReLU          → a mais usada atualmente
+  │     - Tanh          → saída entre -1 e 1
+  │     - Softmax       → para classificação múltipla
+  │     - Quando usar cada uma
+  └── Estado: 🔲 Por fazer
+ 
+  LIÇÃO 6 — Forward Pass
+  ├── Ficheiro: licao6_forward_pass.txt
+  ├── Conteúdo:
+  │     - O que é um forward pass
+  │     - Calcular a saída de uma rede camada a camada
+  │     - Implementar forward pass com NumPy
+  │     - Visualizar o fluxo de dados na rede
+  └── Estado: 🔲 Por fazer
+ 
+ 
+------------------------------------------------------------
+  FASE 3 — REDES NEURAIS DO ZERO
+------------------------------------------------------------
+ 
+  Objetivo desta fase:
+    Construir e treinar uma neural network sem usar
+    bibliotecas de alto nível. Perceber o que acontece
+    por dentro.
+ 
+  LIÇÃO 7 — Funções de Perda (Loss Functions)
+  ├── Ficheiro: licao7_loss_functions.txt
+  ├── Conteúdo:
+  │     - O que é uma loss function e para que serve
+  │     - Mean Squared Error (MSE) — para regressão
+  │     - Binary Cross-Entropy    — para classificação binária
+  │     - Categorical Cross-Entropy — para múltiplas classes
+  │     - Implementar e comparar em NumPy
+  └── Estado: 🔲 Por fazer
+ 
+  LIÇÃO 8 — Backpropagation
+  ├── Ficheiro: licao8_backpropagation.txt
+  ├── Conteúdo:
+  │     - Intuição: "como a rede aprende com os erros"
+  │     - A regra da cadeia (chain rule) explicada com calma
+  │     - Calcular gradientes camada a camada
+  │     - Implementar backprop em NumPy passo a passo
+  └── Estado: 🔲 Por fazer
+ 
+  LIÇÃO 9 — Gradient Descent e Atualização de Pesos
+  ├── Ficheiro: licao9_gradient_descent.txt
+  ├── Conteúdo:
+  │     - Gradient Descent simples (batch)
+  │     - Stochastic Gradient Descent (SGD)
+  │     - Mini-batch Gradient Descent
+  │     - Learning rate — o que é e como afeta o treino
+  │     - Implementar o ciclo de treino completo
+  └── Estado: 🔲 Por fazer
+ 
+  LIÇÃO 10 — Primeira Rede Neural Completa do Zero
+  ├── Ficheiro: licao10_rede_do_zero.txt
+  ├── Conteúdo:
+  │     - Juntar tudo: forward pass + loss + backprop + update
+  │     - Treinar uma rede para classificar dados simples
+  │     - Visualizar a loss a diminuir ao longo do treino
+  │     - Avaliar o modelo nos dados de teste
+  └── Estado: 🔲 Por fazer
+ 
+ 
+------------------------------------------------------------
+  FASE 4 — PYTORCH
+------------------------------------------------------------
+ 
+  Objetivo desta fase:
+    Aprender a usar PyTorch — a biblioteca mais usada
+    em investigação e produção — para construir modelos
+    de forma mais rápida e escalável.
+ 
+  LIÇÃO 11 — Introdução ao PyTorch
+  ├── Ficheiro: licao11_pytorch_intro.txt
+  ├── Conteúdo:
+  │     - O que é o PyTorch e porquê usá-lo
+  │     - Tensores vs arrays NumPy
+  │     - Operações com tensores
+  │     - Mover para GPU (quando disponível)
+  └── Estado: 🔲 Por fazer
+ 
+  LIÇÃO 12 — Autograd — Gradientes Automáticos
+  ├── Ficheiro: licao12_autograd.txt
+  ├── Conteúdo:
+  │     - O que é o autograd e como funciona
+  │     - requires_grad e backward()
+  │     - Como o PyTorch calcula gradientes sozinho
+  │     - Comparar com o backprop manual da Lição 8
+  └── Estado: 🔲 Por fazer
+ 
+  LIÇÃO 13 — Construir Modelos com nn.Module
+  ├── Ficheiro: licao13_nn_module.txt
+  ├── Conteúdo:
+  │     - A classe nn.Module
+  │     - Camadas: nn.Linear, nn.ReLU, nn.Sigmoid
+  │     - Definir um modelo com nn.Sequential
+  │     - Ver os parâmetros do modelo
+  └── Estado: 🔲 Por fazer
+ 
+  LIÇÃO 14 — Treinar um Modelo em PyTorch
+  ├── Ficheiro: licao14_treino_pytorch.txt
+  ├── Conteúdo:
+  │     - DataLoader e Dataset
+  │     - Ciclo de treino: forward → loss → backward → step
+  │     - Otimizadores: SGD, Adam
+  │     - Guardar e carregar modelos (.pt)
+  └── Estado: 🔲 Por fazer
+ 
+ 
+------------------------------------------------------------
+  FASE 5 — PROJETOS PRÁTICOS
+------------------------------------------------------------
+ 
+  Objetivo desta fase:
+    Aplicar tudo o que aprendeste em projetos reais
+    e reconhecidos na comunidade de ML.
+ 
+  PROJETO 1 — Regressão: Prever Preços
+  ├── Ficheiro: projeto1_regressao.txt
+  ├── Conteúdo:
+  │     - Dataset: preços de casas (Boston Housing)
+  │     - Pré-processamento dos dados
+  │     - Construir e treinar modelo de regressão
+  │     - Avaliar com MSE e R²
+  └── Estado: 🔲 Por fazer
+ 
+  PROJETO 2 — Classificação: MNIST (Dígitos Escritos à Mão)
+  ├── Ficheiro: projeto2_mnist.txt
+  ├── Conteúdo:
+  │     - Dataset: imagens 28x28 de dígitos (0 a 9)
+  │     - Construir uma rede para classificar imagens
+  │     - Avaliar com accuracy e matriz de confusão
+  │     - Visualizar previsões certas e erradas
+  └── Estado: 🔲 Por fazer
+ 
+  PROJETO 3 — Introdução a CNNs
+  ├── Ficheiro: projeto3_cnn.txt
+  ├── Conteúdo:
+  │     - O que são Convolutional Neural Networks
+  │     - Camadas Conv2d, MaxPool2d
+  │     - Construir uma CNN para classificar imagens
+  │     - Comparar com a rede simples do Projeto 2
+  └── Estado: 🔲 Por fazer
+ 
+  PROJETO 4 — Introdução a RNNs (Sequências)
+  ├── Ficheiro: projeto4_rnn.txt
+  ├── Conteúdo:
+  │     - O que são Recurrent Neural Networks
+  │     - Para que servem: texto, séries temporais
+  │     - Construir uma RNN simples em PyTorch
+  │     - Exemplo: prever a próxima palavra
+  └── Estado: 🔲 Por fazer
+ 
+ 
+------------------------------------------------------------
+  ESTRUTURA DE PASTAS SUGERIDA PARA O REPOSITÓRIO
+------------------------------------------------------------
+ 
+  neural-networks/
+  │
+  ├── README.md                        ← descrição do projeto
+  │
+  ├── roteiro_aprendizagem.txt         ← este ficheiro
+  │
+  ├── fase1_fundamentos/
+  │   ├── licao1_numpy_arrays.txt
+  │   ├── licao1_numpy_arrays.py
+  │   ├── licao2_dados_ml.txt
+  │   ├── licao2_dados_ml.py
+  │   ├── licao3_matematica.txt
+  │   └── licao3_matematica.py
+  │
+  ├── fase2_neuronio/
+  │   ├── licao4_perceptron.txt
+  │   ├── licao4_perceptron.py
+  │   ├── licao5_ativacao.txt
+  │   ├── licao5_ativacao.py
+  │   ├── licao6_forward_pass.txt
+  │   └── licao6_forward_pass.py
+  │
+  ├── fase3_redes_do_zero/
+  │   ├── licao7_loss_functions.txt
+  │   ├── licao7_loss_functions.py
+  │   ├── licao8_backpropagation.txt
+  │   ├── licao8_backpropagation.py
+  │   ├── licao9_gradient_descent.txt
+  │   ├── licao9_gradient_descent.py
+  │   ├── licao10_rede_do_zero.txt
+  │   └── licao10_rede_do_zero.py
+  │
+  ├── fase4_pytorch/
+  │   ├── licao11_pytorch_intro.txt
+  │   ├── licao11_pytorch_intro.py
+  │   ├── licao12_autograd.txt
+  │   ├── licao12_autograd.py
+  │   ├── licao13_nn_module.txt
+  │   ├── licao13_nn_module.py
+  │   ├── licao14_treino_pytorch.txt
+  │   └── licao14_treino_pytorch.py
+  │
+  └── fase5_projetos/
+      ├── projeto1_regressao.txt
+      ├── projeto1_regressao.py
+      ├── projeto2_mnist.txt
+      ├── projeto2_mnist.py
+      ├── projeto3_cnn.txt
+      ├── projeto3_cnn.py
+      ├── projeto4_rnn.txt
+      └── projeto4_rnn.py
+ 
+ 
+------------------------------------------------------------
+  LEGENDA DE ESTADOS
+------------------------------------------------------------
+ 
+  ✅ Concluída    → lição feita e documentada
+  🔲 Por fazer    → ainda não começada
+  🔄 Em curso     → a trabalhar nela agora
+ 
+ 
+============================================================
+  Bom estudo! Consistência > Velocidade.
+  Uma lição bem percebida vale mais do que dez decoradas.
+============================================================

@@ -1,0 +1,238 @@
+============================================================
+  LIÇÃO 1 — NUMPY PARA NEURAL NETWORKS
+  Documentação de Referência — Arrays e Operações Essenciais
+============================================================
+ 
+--------------------------------------------------------------
+1. INSTALAÇÃO
+--------------------------------------------------------------
+ 
+    pip install numpy
+ 
+ 
+--------------------------------------------------------------
+2. IMPORTAÇÃO
+--------------------------------------------------------------
+ 
+    import numpy as np
+ 
+ 
+--------------------------------------------------------------
+3. ARRAYS — VETORES E MATRIZES
+--------------------------------------------------------------
+ 
+Arrays são a estrutura base do NumPy.
+Em neural networks, os teus dados são SEMPRE arrays.
+ 
+  REGRA DE OURO:
+    - Linhas   = exemplos (amostras de dados)
+    - Colunas  = características (features)
+ 
+ 
+  >> VETOR (1D) — 1 exemplo com várias características
+ 
+    exemplo = np.array([70, 175, 25])
+    # Representa: [peso, altura, idade] de uma pessoa
+ 
+    print(exemplo)        # [70 175 25]
+    print(exemplo.shape)  # (3,) → 3 elementos, 1 dimensão
+ 
+ 
+  >> MATRIZ (2D) — vários exemplos ao mesmo tempo
+ 
+    dados = np.array([
+        [70, 175, 25],   # pessoa 1
+        [85, 180, 30],   # pessoa 2
+        [60, 165, 22],   # pessoa 3
+        [90, 190, 35],   # pessoa 4
+    ])
+ 
+    print(dados.shape)   # (4, 3) → 4 exemplos, 3 features
+ 
+ 
+--------------------------------------------------------------
+4. OPERAÇÕES BÁSICAS
+--------------------------------------------------------------
+ 
+    a = np.array([1, 2, 3])
+    b = np.array([4, 5, 6])
+ 
+    a + b        # [5 7 9]        → soma elemento a elemento
+    a * b        # [4 10 18]      → multiplicação elemento a elemento
+    a * 2        # [2 4 6]        → multiplicar por escalar
+    a ** 2       # [1 4 9]        → potência (usado para calcular erros)
+ 
+ 
+--------------------------------------------------------------
+5. MULTIPLICAÇÃO DE MATRIZES — np.dot()
+--------------------------------------------------------------
+ 
+  Esta é a operação mais importante em neural networks.
+  Cada camada da rede faz exatamente isto.
+ 
+    X = np.array([
+        [1, 2, 3],   # exemplo 1
+        [4, 5, 6],   # exemplo 2
+    ])  # shape: (2, 3)
+ 
+    W = np.array([
+        [0.1, 0.4],
+        [0.2, 0.5],
+        [0.3, 0.6],
+    ])  # shape: (3, 2)
+ 
+    resultado = np.dot(X, W)
+ 
+    print(resultado)
+    # [[1.4  3.2]
+    #  [3.2  7.7]]
+ 
+    print(resultado.shape)  # (2, 2) → 2 exemplos, 2 saídas
+ 
+  NOTA: Para a multiplicação funcionar, o nº de colunas de X
+        tem de ser igual ao nº de linhas de W.
+        (2, 3) · (3, 2) → (2, 2) ✅
+ 
+ 
+--------------------------------------------------------------
+6. RESHAPE — REORGANIZAR ARRAYS
+--------------------------------------------------------------
+ 
+  Reshape reorganiza os dados SEM os alterar.
+  O número total de elementos tem de ser IGUAL antes e depois.
+ 
+    a = np.array([1, 2, 3, 4, 5, 6])  # 6 elementos
+ 
+    a.reshape(2, 3)   # 2x3 = 6 ✅
+    # [[1 2 3]
+    #  [4 5 6]]
+ 
+    a.reshape(3, 2)   # 3x2 = 6 ✅
+    # [[1 2]
+    #  [3 4]
+    #  [5 6]]
+ 
+    a.reshape(2, 4)   # 2x4 = 8 ≠ 6 → ERRO ❌
+    # ValueError: cannot reshape array of size 6 into shape (2,4)
+ 
+ 
+  >> DICA: usar -1 para calcular automaticamente uma dimensão
+ 
+    a.reshape(2, -1)   # "2 linhas, tu decides as colunas" → (2, 3)
+    a.reshape(-1, 3)   # "3 colunas, tu decides as linhas" → (2, 3)
+ 
+  REGRA:
+    Antes do reshape: conta os elementos.
+    Depois do reshape: multiplica as dimensões.
+    Os dois têm de ser IGUAIS. Sempre.
+ 
+ 
+  >> O QUE ACONTECE COM NÚMERO INCOMPATÍVEL?
+ 
+    a = np.array([1, 2, 3, 4, 5])  # 5 elementos
+ 
+    a.reshape(2, 3)   # 2x3 = 6 ≠ 5 → ERRO ❌
+ 
+    Reshapes válidos para 5 elementos:
+      a.reshape(5, 1)   # ✅
+      a.reshape(1, 5)   # ✅
+ 
+ 
+--------------------------------------------------------------
+7. TRANSPOSE — .T
+--------------------------------------------------------------
+ 
+  Vira a matriz: linhas tornam-se colunas e vice-versa.
+  Muito usado para alinhar matrizes antes de np.dot().
+ 
+    b = np.array([[1, 2, 3],
+                  [4, 5, 6]])   # shape (2, 3)
+ 
+    print(b.T)
+    # [[1 4]
+    #  [2 5]
+    #  [3 6]]
+ 
+    print(b.T.shape)   # (3, 2)
+ 
+ 
+--------------------------------------------------------------
+8. FUNÇÕES ESTATÍSTICAS
+--------------------------------------------------------------
+ 
+    dados = np.array([2, 4, 6, 8, 10])
+ 
+    np.mean(dados)   # 6.0  → média
+    np.sum(dados)    # 30   → soma total
+    np.max(dados)    # 10   → valor máximo
+    np.min(dados)    # 2    → valor mínimo
+    np.std(dados)    # 2.83 → desvio padrão
+ 
+ 
+--------------------------------------------------------------
+9. ARRAYS ALEATÓRIOS
+--------------------------------------------------------------
+ 
+  Em neural networks, os pesos iniciais são SEMPRE aleatórios.
+ 
+    np.random.seed(42)        # garante reprodutibilidade
+ 
+    np.random.rand(3, 4)      # valores entre 0 e 1, shape (3,4)
+    np.random.randn(3, 4)     # distribuição normal (média 0, desvio 1)
+                              # ← mais usado para inicializar pesos
+ 
+ 
+--------------------------------------------------------------
+10. EXERCÍCIO — FORWARD PASS BÁSICO
+--------------------------------------------------------------
+ 
+  O exercício seguinte replica o que uma neural network faz
+  em cada camada: multiplicação de matrizes + bias.
+ 
+    import numpy as np
+    np.random.seed(0)
+ 
+    # 3 alunos, cada um com 2 notas
+    X = np.array([
+        [8, 7],
+        [5, 6],
+        [9, 10]
+    ])
+ 
+    # Pesos aleatórios: 2 entradas → 1 saída
+    W = np.random.randn(2, 1)
+ 
+    # Bias
+    b = np.random.randn(1)
+ 
+    # Forward pass
+    saida = np.dot(X, W) + b
+ 
+    print("Pesos:", W)
+    print("Bias:", b)
+    print("Saída:", saida)
+    print("Shape da saída:", saida.shape)
+ 
+  DESAFIO:
+    Muda W para ter 3 saídas em vez de 1.
+    Dica: muda o shape de W para (2, 3).
+ 
+ 
+--------------------------------------------------------------
+11. TABELA RESUMO
+--------------------------------------------------------------
+ 
+  Conceito              | Para que serve em Neural Networks
+  ----------------------|-------------------------------------------
+  np.array()            | Guardar dados e pesos
+  .shape                | Ver dimensões do array
+  np.dot()              | Operação principal de cada camada
+  .reshape()            | Ajustar dimensões dos dados
+  .T (transpose)        | Alinhar matrizes para multiplicação
+  np.random.randn()     | Inicializar pesos aleatoriamente
+  np.mean(), np.sum()   | Calcular erros e métricas
+ 
+ 
+============================================================
+  Próxima Lição: O Neurônio Artificial — Perceptron
+============================================================
