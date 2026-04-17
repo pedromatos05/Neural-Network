@@ -6,8 +6,9 @@ X = np.array([
 ])
 
 W = np.array([
-    [0.2, 0.4, 0.6]
-    [0.1, 0.3, 0.5]
+    [0.2, 0.4],
+    [0.1, 0.3],
+    [0.3, 0.9]
 ])
 
 resultado = np.dot(X, W) # Isto vai multiplicar a matriz X pela matriz W usando a função dot do numpy
