@@ -1,0 +1,257 @@
+============================================================
+  LIÇÃO 2 — DADOS EM MACHINE LEARNING
+  Documentação de Referência — Resumo Completo
+============================================================
+ 
+--------------------------------------------------------------
+1. FEATURES E LABELS
+--------------------------------------------------------------
+ 
+  Features (X)  → dados de entrada
+                  o que sabes sobre cada exemplo
+                  cada linha = 1 exemplo
+                  cada coluna = 1 característica
+ 
+  Labels (y)    → resposta correta
+                  o que queres que a rede aprenda a prever
+ 
+    X = np.array([
+        [8, 7],    # aluno 1 → mat=8, port=7
+        [5, 6],    # aluno 2 → mat=5, port=6
+        [9, 10],   # aluno 3 → mat=9, port=10
+    ])
+ 
+    y = np.array([7.5, 5.5, 9.5])  # média final de cada aluno
+ 
+ 
+--------------------------------------------------------------
+2. DIVIDIR OS DADOS
+--------------------------------------------------------------
+ 
+  Nunca treinas e avalias a rede com os mesmos dados.
+ 
+  TREINO      (70%)  → a rede aprende aqui
+                       os pesos são ajustados com estes dados
+ 
+  VALIDAÇÃO   (15%)  → usada durante o treino
+                       para ver se há overfitting
+                       NÃO ajusta os pesos
+ 
+  TESTE       (15%)  → só usada no final
+                       avaliação final e honesta
+                       a rede NUNCA viu estes dados
+ 
+  ANALOGIA:
+    Treino     → estudar a matéria
+    Validação  → testes práticos enquanto estudas
+    Teste      → o exame final
+ 
+ 
+  >> CÓDIGO
+ 
+    n           = len(X)
+    n_treino    = int(n * 0.70)
+    n_validacao = int(n * 0.15)
+ 
+    X_treino    = X[:n_treino]
+    X_validacao = X[n_treino : n_treino + n_validacao]
+    X_teste     = X[n_treino + n_validacao:]
+ 
+    y_treino    = y[:n_treino]
+    y_validacao = y[n_treino : n_treino + n_validacao]
+    y_teste     = y[n_treino + n_validacao:]
+ 
+ 
+--------------------------------------------------------------
+3. SLICING — O QUE É O ":"
+--------------------------------------------------------------
+ 
+  O ":" significa "de onde até onde".
+ 
+    array[:7]    → do início até à posição 6 (não inclui 7)
+    array[7:]    → da posição 7 até ao fim
+    array[3:7]   → da posição 3 até à posição 6
+    array[:]     → tudo
+ 
+  REGRA:
+    [ início : fim ]
+       ↑          ↑
+       │          └─ vazio = vai até ao fim
+       └─ vazio = começa no início
+ 
+ 
+--------------------------------------------------------------
+4. BARALHAR OS DADOS — SHUFFLING
+--------------------------------------------------------------
+ 
+  Antes de dividir, baralha sempre os dados.
+  Evita que a divisão fique enviesada.
+ 
+  IMPORTANTE: baralhar X e y com os MESMOS índices
+              para não perder a correspondência entre
+              features e labels.
+ 
+    indices = np.arange(len(X))
+    np.random.shuffle(indices)
+    X, y = X[indices], y[indices]
+ 
+ 
+--------------------------------------------------------------
+5. NORMALIZAÇÃO
+--------------------------------------------------------------
+ 
+  Escala os valores para ficarem entre 0 e 1.
+ 
+  FÓRMULA:
+    X_norm = (X - X_min) / (X_max - X_min)
+ 
+  CÓDIGO:
+    X_min  = X.min(axis=0)
+    X_max  = X.max(axis=0)
+    X_norm = (X - X_min) / (X_max - X_min)
+ 
+  RESULTADO:
+    Todos os valores ficam entre 0 e 1.
+    Nunca há valores negativos.
+ 
+  QUANDO USAR:
+    Quando sabes que os dados têm um mínimo e máximo fixo.
+    Exemplos: notas (0 a 20), pixels (0 a 255)
+ 
+ 
+--------------------------------------------------------------
+6. STANDARDIZAÇÃO
+--------------------------------------------------------------
+ 
+  Centra os dados na média 0 com desvio padrão 1.
+ 
+  FÓRMULA:
+    X_stand = (X - média) / desvio_padrão
+ 
+  CÓDIGO:
+    X_media = X.mean(axis=0)
+    X_std   = X.std(axis=0)
+    X_stand = (X - X_media) / X_std
+ 
+  RESULTADO:
+    Valores centrados em 0.
+    Podem ser negativos.
+    Maioria dos valores fica entre -3 e 3.
+ 
+  QUANDO USAR:
+    Quando não sabes os limites dos dados ou há outliers.
+    Exemplos: salários, preços de casas.
+    ← mais usada em neural networks
+ 
+ 
+--------------------------------------------------------------
+7. NORMALIZAÇÃO vs STANDARDIZAÇÃO
+--------------------------------------------------------------
+ 
+                  Normalização      Standardização
+  ──────────────────────────────────────────────────
+  Valores         Entre 0 e 1       Centrados em 0
+  Negativos?      Nunca             Sim
+  Fórmula         (x-min)/(max-min) (x-média)/desvio
+  Quando usar     Limites fixos     Sem limites fixos
+  Mais usada em   Imagens           Neural networks
+ 
+ 
+--------------------------------------------------------------
+8. AXIS=0 — O QUE É
+--------------------------------------------------------------
+ 
+  axis=0  → direção vertical   → opera por coluna
+  axis=1  → direção horizontal → opera por linha
+ 
+  EXEMPLO:
+    X = [[8,  7],
+         [5,  6],
+         [9, 10]]
+ 
+    X.mean()         →  7.5        (média de tudo)
+    X.mean(axis=0)   →  [7.3, 7.6] (média de cada coluna)
+    X.mean(axis=1)   →  [7.5, 5.5, 9.5] (média de cada linha)
+ 
+  PORQUÊ axis=0 NA STANDARDIZAÇÃO:
+    Cada coluna é uma feature diferente.
+    Precisamos de calcular a média e desvio
+    de cada feature separadamente.
+ 
+ 
+--------------------------------------------------------------
+9. O QUE CONCLUÍMOS COM OS RESULTADOS
+--------------------------------------------------------------
+ 
+  Normalização   → mostra a posição relativa de cada exemplo
+                   dentro do grupo (0 = pior, 1 = melhor)
+ 
+  Standardização → mostra o quanto cada exemplo se afasta
+                   da média (positivo = acima, negativo = abaixo)
+ 
+  O mais importante para neural networks:
+    Antes → features em escalas diferentes
+             a rede dá mais atenção à feature
+             com números maiores (injusto)
+ 
+    Depois → features na mesma escala
+              a rede trata todas as features
+              de forma justa e aprende melhor
+ 
+ 
+--------------------------------------------------------------
+10. CÓDIGO COMPLETO — PASSO A PASSO
+--------------------------------------------------------------
+ 
+    import numpy as np
+    np.random.seed(42)
+ 
+    X = np.array([
+        [8, 7], [5, 6], [9, 10], [3, 4],
+        [7, 8], [6, 5], [4,  3], [8,  9]
+    ], dtype=float)
+ 
+    y = np.array([7.5, 5.5, 9.5, 3.5, 7.5, 5.5, 3.5, 8.5])
+ 
+    # PASSO 1 — Baralhar
+    indices = np.arange(len(X))
+    np.random.shuffle(indices)
+    X, y = X[indices], y[indices]
+ 
+    # PASSO 2 — Normalizar
+    X_min  = X.min(axis=0)
+    X_max  = X.max(axis=0)
+    X_norm = (X - X_min) / (X_max - X_min)
+ 
+    # PASSO 3 — Dividir
+    n        = len(X)
+    n_treino = int(n * 0.70)
+ 
+    X_treino = X_norm[:n_treino]
+    X_teste  = X_norm[n_treino:]
+    y_treino = y[:n_treino]
+    y_teste  = y[n_treino:]
+ 
+    print("X treino:\n",  X_treino)
+    print("X teste:\n",   X_teste)
+    print("y treino:",    y_treino)
+    print("y teste:",     y_teste)
+ 
+ 
+--------------------------------------------------------------
+11. TABELA RESUMO
+--------------------------------------------------------------
+ 
+  Conceito         O que é                  Porquê importa
+  ───────────────────────────────────────────────────────────
+  Features (X)     Dados de entrada         O que a rede recebe
+  Labels (y)       Resposta correta         O que a rede prevê
+  Treino (70%)     Dados de aprendizagem    Onde os pesos ajustam
+  Validação (15%)  Dados de monitorização   Detetar overfitting
+  Teste (15%)      Dados de avaliação       Resultado final honesto
+  Shuffle          Baralhar os dados        Evitar divisões enviesadas
+  Normalização     Escala 0 a 1             Dados com limites fixos
+  Standardização   Média 0, desvio 1        Dados sem limites fixos
+  axis=0           Operar por coluna        Estatísticas por feature
+ 
+ 
