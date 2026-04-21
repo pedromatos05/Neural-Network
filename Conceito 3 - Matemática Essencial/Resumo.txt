@@ -1,0 +1,272 @@
+============================================================
+  LIÇÃO 3 — MATEMÁTICA ESSENCIAL PARA NEURAL NETWORKS
+  Documentação de Referência — Resumo Completo
+============================================================
+
+--------------------------------------------------------------
+1. O PROBLEMA CENTRAL
+--------------------------------------------------------------
+
+  Uma neural network tem um objetivo muito simples:
+
+    Encontrar os pesos que fazem a rede errar o menos possível
+
+  Para isso precisa de responder a duas perguntas:
+
+    1. O quanto estou a errar?        → Loss Function
+    2. Para que lado devo ajustar?    → Gradiente e Derivadas
+
+
+--------------------------------------------------------------
+2. O QUE É UMA FUNÇÃO
+--------------------------------------------------------------
+
+  Recebe um valor, faz algo com ele, e devolve outro valor.
+
+    def funcao(x):
+        return x ** 2
+
+    funcao(2)    # 4
+    funcao(3)    # 9
+    funcao(-2)   # 4
+
+  Em neural networks a função mais importante é a loss function:
+    pesos → [ função da rede ] → erro
+
+
+--------------------------------------------------------------
+3. MINIMIZAR UMA FUNÇÃO
+--------------------------------------------------------------
+
+  Objetivo → encontrar o ponto mais baixo da função.
+
+  ANALOGIA:
+    Estás numa montanha com os olhos vendados.
+    Sentes a inclinação do chão.
+    Caminhas sempre para o lado que desce.
+    Isso é exatamente o que a neural network faz.
+
+
+--------------------------------------------------------------
+4. O QUE É UMA DERIVADA
+--------------------------------------------------------------
+
+  Mede a inclinação de uma função num ponto.
+  "Se eu aumentar x um bocadinho, o resultado sobe ou desce?"
+
+    def funcao(x):
+        return x ** 2
+
+    def derivada(x):
+        return 2 * x      # inclinação em cada ponto
+
+    derivada(3)    #  6  → função está a subir
+    derivada(-3)   # -6  → função está a descer
+    derivada(0)    #  0  → estamos no mínimo
+
+
+  OS 3 CASOS EM QUE A DERIVADA É ZERO:
+
+    Mínimo     → derivada = 0  ← queremos isto
+    Máximo     → derivada = 0
+    Constante  → derivada = 0 em todo o lado
+
+  IMPORTANTE:
+    Derivada zero é condição necessária para ser mínimo
+    mas não é condição suficiente.
+    Pode ser mínimo, máximo ou zona constante.
+
+  INTERPRETAÇÃO:
+    Derivada positiva  → função a subir  → ir para a esquerda
+    Derivada negativa  → função a descer → ir para a direita
+    Derivada zero      → estás no mínimo → parar
+
+
+--------------------------------------------------------------
+5. O GRADIENTE
+--------------------------------------------------------------
+
+  O gradiente é um vetor com uma derivada por peso.
+  É a derivada calculada para cada peso ao mesmo tempo.
+
+    gradiente = np.array([
+        2 * w1,    #  derivada em relação a w1
+        2 * w2,    #  derivada em relação a w2
+        2 * w3     #  derivada em relação a w3
+    ])
+
+  INTERPRETAÇÃO:
+    gradiente positivo → aumentar esse peso aumenta o erro
+                      → temos de DIMINUIR esse peso
+    gradiente negativo → aumentar esse peso diminui o erro
+                      → temos de AUMENTAR esse peso
+    gradiente zero     → esse peso está no ponto ideal
+
+  NOTA:
+    O gradiente aponta sempre para a direção de maior subida.
+    Por isso fazemos o contrário — subtraímos o gradiente.
+
+
+--------------------------------------------------------------
+6. GRADIENT DESCENT
+--------------------------------------------------------------
+
+  Algoritmo que usa o gradiente para atualizar os pesos.
+
+  FÓRMULA:
+    novo_peso = peso_atual - learning_rate * gradiente
+
+  CÓDIGO:
+    w = w - lr * gradiente
+
+  O sinal de menos faz sempre o contrário do gradiente
+  porque o gradiente aponta para cima e queremos descer.
+
+
+--------------------------------------------------------------
+7. O LEARNING RATE
+--------------------------------------------------------------
+
+  Controla o tamanho do passo a cada atualização.
+  Não se calcula — é definido por ti antes do treino.
+
+    lr = 0.001   # muito pequeno → aprende muito devagar
+    lr = 0.01    # pequeno       → seguro, valor típico
+    lr = 0.1     # médio         → equilibrado
+    lr = 1.0     # grande        → pode não convergir
+
+  O QUE OBSERVAR:
+    Loss a diminuir devagar  → aumenta o lr
+    Loss a saltar para cima  → diminui o lr
+    Loss a diminuir bem      → mantém o lr
+
+  OS 3 CASOS:
+
+    lr pequeno  → passos pequenos → converge devagar
+                  pode não chegar ao mínimo se tiveres
+                  poucas épocas
+
+    lr ideal    → converge bem dentro do número de épocas
+
+    lr grande   → passos grandes → pode explodir
+                  em vez de descer, o peso cresce
+
+
+--------------------------------------------------------------
+8. OS PASSOS / ÉPOCAS
+--------------------------------------------------------------
+
+  PASSO  → 1 atualização do peso
+            usado em exemplos simples
+
+  ÉPOCA  → 1 passagem completa por todos os dados
+            usado quando treinas com um dataset real
+
+  A RELAÇÃO:
+    Poucos passos + lr pequeno  → não chega ao mínimo
+    Muitos passos + lr pequeno  → chega mas devagar
+    Poucos passos + lr ideal    → chega ao mínimo
+    Qualquer passo + lr grande  → explode
+
+
+--------------------------------------------------------------
+9. O QUE OS PESOS REPRESENTAM
+--------------------------------------------------------------
+
+  Após o treino cada peso reflete a IMPORTÂNCIA de cada feature.
+
+    Peso grande    → essa feature importa muito
+    Peso pequeno   → essa feature importa pouco
+    Peso negativo  → essa feature prejudica o resultado
+    Peso zero      → essa feature não influencia nada
+
+  EXEMPLO:
+    previsão = (mat * w1) + (port * w2) + (faltas * w3)
+
+    Após treino:
+    w1 =  0.6   → matemática importa muito
+    w2 =  0.3   → português importa menos
+    w3 = -0.8   → faltas prejudicam
+
+  A rede descobriu isto sozinha apenas olhando para os dados.
+
+
+--------------------------------------------------------------
+10. COMO SE CALCULA CADA ELEMENTO
+--------------------------------------------------------------
+
+  PESO (w)
+    → começa aleatório
+    → não se calcula, apenas se atualiza
+    → w = w - lr * gradiente
+
+  LEARNING RATE (lr)
+    → defines tu antes de treinar
+    → não se calcula
+    → valor típico: 0.01 ou 0.001
+
+  GRADIENTE
+    → este sim, calcula-se
+    → a partir do erro da rede
+    → gradiente = media(2 * X * erro)
+
+    PASSO 1 → previsão:   y_pred    = X * w
+    PASSO 2 → erro:       erro      = y_pred - y
+    PASSO 3 → gradiente:  gradiente = media(2 * X * erro)
+    PASSO 4 → novo peso:  w         = w - lr * gradiente
+
+
+--------------------------------------------------------------
+11. CÓDIGO COMPLETO — CICLO DE TREINO
+--------------------------------------------------------------
+
+    import numpy as np
+    np.random.seed(42)
+
+    # Dados — queremos que a rede aprenda y = 2x
+    X = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+    y = np.array([2.0, 4.0, 6.0, 8.0, 10.0])
+
+    w  = np.random.randn(1)[0]   # peso inicial aleatório
+    lr = 0.01                    # learning rate
+
+    for epoca in range(20):
+
+        # PASSO 1 — previsao
+        y_pred = X * w
+
+        # PASSO 2 — erro
+        erro = y_pred - y
+
+        # PASSO 3 — gradiente
+        gradiente = np.mean(2 * X * erro)
+
+        # PASSO 4 — atualizar peso
+        w = w - lr * gradiente
+
+        print(f"Epoca {epoca} | Peso: {w:.4f} | Erro: {np.mean(erro**2):.4f}")
+
+    print(f"\nPeso final: {w:.4f}")
+    print(f"Esperado:   2.0000  (porque y = 2x)")
+
+
+--------------------------------------------------------------
+12. TABELA RESUMO
+--------------------------------------------------------------
+
+  Conceito          O que e                  Para que serve
+  ─────────────────────────────────────────────────────────
+  Funcao            Input -> Output          Base de tudo em ML
+  Minimizar         Ponto mais baixo         Objetivo do treino
+  Derivada          Inclinacao num ponto     Saber para onde ajustar
+  Gradiente         Derivada por cada peso   Direcao de ajuste
+  Gradient Descent  w = w - lr * gradiente   Algoritmo de treino
+  Learning Rate     Tamanho do passo         Velocidade de treino
+  Epocas/Passos     Numero de atualizacoes   Quanto tempo treinar
+  Pesos             Importancia de features  O que a rede aprendeu
+
+
+============================================================
+  Proxima Licao: Licao 4 — O Perceptron
+  O primeiro neuronio artificial
+============================================================
