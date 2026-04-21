@@ -1,0 +1,358 @@
+============================================================
+  LIÇÃO 4 — O PERCEPTRON
+  Documentação de Referência — Resumo Completo
+============================================================
+
+--------------------------------------------------------------
+1. O QUE É O PERCEPTRON
+--------------------------------------------------------------
+
+  O perceptron é o bloco mais básico de uma neural network.
+  É um único neurônio artificial.
+
+  NEURÔNIO BIOLÓGICO vs ARTIFICIAL:
+
+    Biológico                    Artificial
+    ─────────────────────────    ─────────────────────────
+    Dendrites recebem sinais  →  Entradas (X)
+    Corpo processa o sinal    →  Soma ponderada (X * W + b)
+    Axônio dispara ou não     →  Função de ativação (0 ou 1)
+
+  ESTRUTURA:
+
+    Entradas × Pesos → Soma → Ativação → Saída
+
+    x1 ──► × w1 ──┐
+                   ├──► z = (x1w1 + x2w2 + b) ──► f(z) ──► y
+    x2 ──► × w2 ──┘
+                ↑
+               bias
+
+
+--------------------------------------------------------------
+2. OS 3 ELEMENTOS DO PERCEPTRON
+--------------------------------------------------------------
+
+  PESOS (w)
+    → começam aleatórios
+    → atualizam a cada época
+    → refletem a importância de cada feature
+    → w = np.random.randn(n_features)
+
+    Peso grande    → feature importa muito
+    Peso pequeno   → feature importa pouco
+    Peso negativo  → feature prejudica o resultado
+    Peso zero      → feature não influencia nada
+
+  BIAS (b)
+    → começa aleatório
+    → atualiza a cada época
+    → independente das features
+    → dá flexibilidade extra à rede
+    → b = np.random.randn(1)
+
+    SEM bias → rede limitada, só aprende padrões
+               que passam pela origem
+    COM bias → rede flexível, aprende qualquer padrão
+
+  LEARNING RATE (lr)
+    → defines tu antes do treino
+    → não se calcula
+    → controla o tamanho do passo
+
+    lr pequeno  → aprende devagar, pode não convergir
+    lr ideal    → converge bem
+    lr grande   → pode explodir
+
+
+--------------------------------------------------------------
+3. A SOMA PONDERADA — Z
+--------------------------------------------------------------
+
+  É o valor calculado antes da função de ativação.
+  Combina todos os dados e pesos num único número.
+
+    z = np.dot(X, w) + b
+
+  EXEMPLO:
+    X = [0.83, 0.57]   (notas normalizadas)
+    w = [2.14, 1.87]   (pesos aprendidos)
+    b = [-1.32]        (bias)
+
+    z = (0.83 * 2.14) + (0.57 * 1.87) + (-1.32)
+    z = 1.776 + 1.066 - 1.32
+    z = 1.522
+
+  O Z sozinho não tem significado direto.
+  É a função de ativação que o transforma em algo útil.
+
+
+--------------------------------------------------------------
+4. FUNÇÕES DE ATIVAÇÃO
+--------------------------------------------------------------
+
+  Transformam o Z num valor interpretável.
+  A escolha depende do tipo de problema.
+
+  >> SIGMOID
+  ─────────────────────────────────────────────────────────
+
+    def sigmoid(z):
+        return 1 / (1 + np.exp(-z))
+
+    QUANDO USAR:
+      Classificação binária → 2 classes (passou/chumbou,
+                              sim/não, 0/1)
+      Sempre na última camada quando tens 2 classes.
+
+    SAÍDA:    Valor entre 0 e 1 (probabilidade)
+    DECISÃO:  >= 0.5 → classe 1 / < 0.5 → classe 0
+
+    COMPORTAMENTO:
+      sigmoid(-3) = 0.047  → muito perto de 0 (chumbou)
+      sigmoid(0)  = 0.500  → incerto
+      sigmoid(3)  = 0.952  → muito perto de 1 (passou)
+
+      z muito negativo → saída perto de 0
+      z = 0            → saída = 0.5 (incerto)
+      z muito positivo → saída perto de 1
+
+  >> SOFTMAX
+  ─────────────────────────────────────────────────────────
+
+    QUANDO USAR:
+      Classificação múltipla → 3 ou mais classes
+      ex: classificar dígitos (0 a 9), raças de cães
+
+    SAÍDA:    Vetor de probabilidades que somam 1
+    DECISÃO:  classe com maior probabilidade
+
+  >> RELU (Rectified Linear Unit)
+  ─────────────────────────────────────────────────────────
+
+    def relu(z):
+        return np.maximum(0, z)
+
+    QUANDO USAR:
+      Camadas intermédias (hidden layers)
+      É a mais usada em redes profundas
+
+    SAÍDA:    0 se z < 0, z se z >= 0
+    NOTA:     Não usar na última camada
+
+  >> SEM ATIVAÇÃO
+  ─────────────────────────────────────────────────────────
+
+    QUANDO USAR:
+      Regressão → prever um valor contínuo
+      ex: prever nota final, prever preço de casa
+
+    SAÍDA:    Qualquer valor real
+
+
+--------------------------------------------------------------
+5. O FORWARD PASS
+--------------------------------------------------------------
+
+  Calcular a previsão da rede com os pesos atuais.
+  A estrutura é sempre a mesma — muda a função de ativação.
+
+  >> CLASSIFICAÇÃO BINÁRIA (sigmoid)
+
+    def forward(X, w, b):
+        z = np.dot(X, w) + b
+        return sigmoid(z)
+
+  >> REGRESSÃO (sem ativação)
+
+    def forward(X, w, b):
+        z = np.dot(X, w) + b
+        return z
+
+  >> CLASSIFICAÇÃO MÚLTIPLA (softmax)
+
+    def forward(X, w, b):
+        z = np.dot(X, w) + b
+        return softmax(z)
+
+
+--------------------------------------------------------------
+6. A LOSS FUNCTION
+--------------------------------------------------------------
+
+  Mede o erro entre a previsão e a resposta correta.
+  A escolha depende do tipo de problema.
+
+  >> BINARY CROSS ENTROPY
+  ─────────────────────────────────────────────────────────
+
+    def loss(y_pred, y):
+        y_pred = np.clip(y_pred, 1e-7, 1 - 1e-7)
+        return -np.mean(y * np.log(y_pred) +
+                        (1 - y) * np.log(1 - y_pred))
+
+    QUANDO USAR:
+      Classificação binária (0 ou 1)
+      Sempre a par com sigmoid
+
+    PORQUÊ:
+      Penaliza mais quando a rede está confiante e errada.
+      Prever 0.99 quando a resposta é 0 é muito pior
+      do que prever 0.6.
+
+  >> MEAN SQUARED ERROR (MSE)
+  ─────────────────────────────────────────────────────────
+
+    def loss(y_pred, y):
+        return np.mean((y_pred - y) ** 2)
+
+    QUANDO USAR:
+      Regressão → prever valores contínuos
+      ex: prever nota final, prever preço
+
+  >> CATEGORICAL CROSS ENTROPY
+  ─────────────────────────────────────────────────────────
+
+    QUANDO USAR:
+      Classificação múltipla (3 ou mais classes)
+      Sempre a par com softmax
+
+
+--------------------------------------------------------------
+7. TABELA — QUANDO USAR CADA UM
+--------------------------------------------------------------
+
+  Problema               Ativação    Loss
+  ────────────────────────────────────────────────────────
+  Classificação binária  Sigmoid     Binary Cross Entropy
+  Classificação múltipla Softmax     Categorical Cross Entropy
+  Regressão              Nenhuma     MSE (Mean Squared Error)
+  Camadas intermédias    ReLU        (não se aplica)
+
+
+--------------------------------------------------------------
+8. O CICLO DE TREINO COMPLETO
+--------------------------------------------------------------
+
+  Para cada época:
+
+    1. FORWARD PASS    → calcular previsão
+       y_pred = forward(X, w, b)
+
+    2. LOSS            → medir o erro
+       l = loss(y_pred, y)
+
+    3. GRADIENTES      → calcular ajustes
+       erro = y_pred - y
+       dw   = np.dot(X.T, erro) / len(X)
+       db   = np.mean(erro)
+
+    4. ATUALIZAR       → melhorar os pesos
+       w = w - lr * dw
+       b = b - lr * db
+
+    5. REPETIR         → até o erro ser mínimo
+
+
+--------------------------------------------------------------
+9. INTERPRETAR OS RESULTADOS
+--------------------------------------------------------------
+
+  PREVISÃO PERTO DE 0.0  → rede confiante → chumbou
+  PREVISÃO PERTO DE 0.5  → rede insegura  → pode errar
+  PREVISÃO PERTO DE 1.0  → rede confiante → passou
+
+  QUANDO A REDE ERRA:
+
+    Todos == 1            → poucas épocas ou poucos dados
+    Loss não desce        → lr muito pequeno
+    Loss sobe             → lr muito grande
+    Previsão perto de 0.5 → poucos dados para aprender
+                            esse padrão
+
+  AJUSTAR O LR:
+
+    Loss a diminuir devagar  → aumenta o lr
+    Loss a saltar para cima  → diminui o lr
+    Loss a diminuir bem      → mantém o lr
+
+
+--------------------------------------------------------------
+10. CÓDIGO COMPLETO — PERCEPTRON
+--------------------------------------------------------------
+
+    import numpy as np
+    np.random.seed(42)
+
+    X = np.array([
+        [8, 7], [5, 6], [9, 10],
+        [3, 4], [2, 3], [7,  8],
+    ], dtype=float)
+
+    y = np.array([1, 0, 1, 0, 0, 1], dtype=float)
+
+    # Normalizar
+    X_min  = X.min(axis=0)
+    X_max  = X.max(axis=0)
+    X_norm = (X - X_min) / (X_max - X_min)
+
+    # Funções
+    def sigmoid(z):
+        return 1 / (1 + np.exp(-z))
+
+    def forward(X, w, b):
+        return sigmoid(np.dot(X, w) + b)
+
+    def loss(y_pred, y):
+        y_pred = np.clip(y_pred, 1e-7, 1 - 1e-7)
+        return -np.mean(y * np.log(y_pred) +
+                        (1 - y) * np.log(1 - y_pred))
+
+    # Pesos iniciais
+    w  = np.random.randn(2)
+    b  = np.random.randn(1)
+    lr = 0.5
+
+    # Treino
+    for epoca in range(100):
+        y_pred = forward(X_norm, w, b)
+        l      = loss(y_pred, y)
+        erro   = y_pred - y
+        dw     = np.dot(X_norm.T, erro) / len(X)
+        db     = np.mean(erro)
+        w      = w - lr * dw
+        b      = b - lr * db
+
+    # Resultado final
+    y_final = forward(X_norm, w, b)
+    for i in range(len(X)):
+        decisao = "passou" if y_final[i] >= 0.5 else "chumbou"
+        print(f"Aluno {i+1} | Real={int(y[i])} | "
+              f"Previsto={y_final[i]:.4f} | {decisao}")
+
+
+--------------------------------------------------------------
+11. TABELA RESUMO GERAL
+--------------------------------------------------------------
+
+  Conceito          O que e                    Detalhe
+  ──────────────────────────────────────────────────────────
+  Perceptron        Neuronio artificial        1 camada, 1 neuronio
+  Pesos (w)         Importancia das features   Comecam aleatorios
+  Bias (b)          Ajuste independente        Comeca aleatorio
+  Z                 Soma ponderada             z = X*w + b
+  Sigmoid           Ativacao binaria           Saida entre 0 e 1
+  ReLU              Ativacao intermédia        Mais usada em DL
+  Softmax           Ativacao multipla          Soma das saidas = 1
+  Forward Pass      Calcular previsao          Usa pesos atuais
+  Binary CE         Loss binaria               Par com sigmoid
+  MSE               Loss regressao             Par com sem ativacao
+  Categorical CE    Loss multipla              Par com softmax
+  Gradiente         Direcao do ajuste          Calculado do erro
+  Epoca             1 ciclo de treino          Forward+Loss+Update
+
+
+============================================================
+  Proxima Licao: Licao 5 — Funcoes de Ativacao
+  Sigmoid, ReLU, Tanh e Softmax em detalhe
+============================================================
