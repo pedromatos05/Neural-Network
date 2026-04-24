@@ -356,3 +356,29 @@
   Proxima Licao: Licao 5 — Funcoes de Ativacao
   Sigmoid, ReLU, Tanh e Softmax em detalhe
 ============================================================
+
+
+
+TENS UM PROBLEMA
+      │
+      ├── Resposta é 0 ou 1?
+      │   (spam/não spam, passou/chumbou)
+      │         │
+      │         └──► Sigmoid + Binary Cross Entropy
+      │
+      ├── Resposta é 1 de N classes?
+      │   (que dígito, que animal, que língua)
+      │         │
+      │         └──► Softmax + Categorical Cross Entropy
+      │
+      └── Resposta é um número contínuo?
+          (nota, preço, temperatura)
+                │
+                └──► Sem ativação + MSE
+
+
+CAMADAS DO MEIO (hidden layers)
+      │
+
+
+      └──► Sempre ReLU  (independentemente do problema)
